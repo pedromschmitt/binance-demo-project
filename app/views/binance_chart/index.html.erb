@@ -8,7 +8,7 @@
         name: 'Last 5 Days Moving Average',
         type: 'line',
         data: [
-                <% @data_last_50[4..50].each_with_index do |position, index| %>
+                <% @data_last50[4..50].each_with_index do |position, index| %>
                   {
                     x: new Date(<%= position[0]%>),
                     y: <%= @last_5_days_moving_average[index] || '' %>
@@ -19,7 +19,7 @@
         name: '<%= @symbol %> candlestick',
         type: 'candlestick',
         data: [
-                <% @data_last_50.each do |position| %>
+                <% @data_last50.each do |position| %>
                   {
                     x: new Date(<%= position[0]%>),
                     y: [<%= position[1] %>,<%= position[2] %>,<%= position[3] %>,<%= position[4] %>]
