@@ -1,0 +1,64 @@
+<h1>BinanceChart</h1>
+<div id="chart"></div>
+
+<script>
+  document.addEventListener("turbolinks:load", function () {
+    var options = {
+      series: [{
+        name: 'Last 5 Days Moving Average',
+        type: 'line',
+        data: [
+                <% @data_last_50[4..50].each_with_index do |position, index| %>
+                  {
+                    x: new Date(<%= position[0]%>),
+                    y: <%= @last_5_days_moving_average[index] || '' %>
+                  },
+                <% end %>
+              ]
+      }, {
+        name: '<%= @symbol %> candlestick',
+        type: 'candlestick',
+        data: [
+                <% @data_last_50.each do |position| %>
+                  {
+                    x: new Date(<%= position[0]%>),
+                    y: [<%= position[1] %>,<%= position[2] %>,<%= position[3] %>,<%= position[4] %>]
+                  },
+                <% end %>
+            ]
+      }],
+      chart: {
+      height: 350,
+      type: 'line',
+      },
+      title: {
+        text: 'Last 50 position <%= @symbol %> with moving average',
+        align: 'left'
+      },
+      stroke: {
+        width: [3, 1]
+      },
+      tooltip: {
+        shared: true,
+        custom: [function({seriesIndex, dataPointIndex, w}) {
+          return w.globals.series[seriesIndex][dataPointIndex]
+        }, function({ seriesIndex, dataPointIndex, w }) {
+          var o = w.globals.seriesCandleO[seriesIndex][dataPointIndex]
+          var h = w.globals.seriesCandleH[seriesIndex][dataPointIndex]
+          var l = w.globals.seriesCandleL[seriesIndex][dataPointIndex]
+          var c = w.globals.seriesCandleC[seriesIndex][dataPointIndex]
+          return (
+            ''
+          )
+        }]
+      },
+      xaxis: {
+        type: 'datetime'
+      }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+  });
+
+</script>
